@@ -7,11 +7,15 @@ public class Story {
     private Integer id;
     private String storyText;
     private List<Answer> answerList = new ArrayList<>();
+
     public Story(Integer id) {
         this.id = id;
         getStoryFromContainer();
     }
 
+    public boolean isRestartable(){
+        return answerList.isEmpty();
+    }
     public String getStoryText() {
         return storyText;
     }

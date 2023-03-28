@@ -1,7 +1,5 @@
 package quest.database;
 
-import java.util.List;
-
 public class Answer {
     private int id;
     private String answerText;
@@ -11,7 +9,7 @@ public class Answer {
         getAnswerFromContainer();
     }
 
-    private void getAnswerFromContainer(){
+    private void getAnswerFromContainer() {
         String text = StoryTextContainer.getAnswerDB().get(this.id);
         this.answerText = text;
     }

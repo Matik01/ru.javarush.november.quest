@@ -16,20 +16,19 @@ import java.util.List;
 
 @WebServlet(name = "InitServlet", value = "/init")
 public class InitServlet extends HttpServlet {
-    private UFOQuestOrigin UFOQuestOrigin;
+
 
     @Override
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
+        UFOQuestOrigin ufoQuestOrigin= new UFOQuestOrigin();
         HttpSession session = req.getSession();
         String init = req.getParameter("init");
 
-        if (UFOQuestOrigin == null) {
-            UFOQuestOrigin = new UFOQuestOrigin();
-            UFOQuestOrigin.scenarioGenerator();
-            UFOQuestOrigin.answersGenerator();
-            UFOQuestOrigin.buildQuest();
-        }
-        List<Story> scenario = UFOQuestOrigin.getStoryList();
+        ufoQuestOrigin.scenarioGenerator();
+        ufoQuestOrigin.answersGenerator();
+        ufoQuestOrigin.buildQuest();
+
+        List<Story> scenario = ufoQuestOrigin.getStoryList();
 
         if (init.equals("start")) {
             Story story = scenario.get(0);
@@ -37,7 +36,8 @@ public class InitServlet extends HttpServlet {
             session.setAttribute("story", story);
 
             for (int i = 0; i < 2; i++) {
-                scenario.remove(0);
+                scenario.remove(i);
+                i--;
             }
 
             session.getServletContext().getRequestDispatcher("/main.jsp").forward(req, resp);
@@ -48,7 +48,6 @@ public class InitServlet extends HttpServlet {
 
             session.getServletContext().getRequestDispatcher("/restart.jsp").forward(req, resp);
         }
-
 
     }
 }

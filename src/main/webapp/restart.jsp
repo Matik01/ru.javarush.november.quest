@@ -12,6 +12,7 @@
 </head>
 <body>
 <h1>${story.getStoryText()}</h1>
-<button onclick="window.location"> ${story.getAnswerList().get(0).getAnswerText()}</button>
+<button onclick="window.location='/index.jsp'"> RESTART</button>
+
 </body>
 </html>
