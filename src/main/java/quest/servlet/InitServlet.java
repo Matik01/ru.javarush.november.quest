@@ -1,53 +1,54 @@
 package quest.servlet;
 
-import quest.database.Answer;
-import quest.database.UFOQuestOrigin;
-import quest.database.Story;
-
+import quest.model.generator.AnswerGenerator;
+import quest.model.generator.ScenarioGenerator;
+import quest.model.UFOQuestOrigin;
+import quest.model.Story;
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
-import javax.servlet.http.HttpServlet;
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
-import javax.servlet.http.HttpSession;
+import javax.servlet.http.*;
 import java.io.IOException;
-import java.util.HashMap;
 import java.util.List;
 
 @WebServlet(name = "InitServlet", value = "/init")
 public class InitServlet extends HttpServlet {
-
-
+    SessionData sessionData;
     @Override
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
-        UFOQuestOrigin ufoQuestOrigin= new UFOQuestOrigin();
         HttpSession session = req.getSession();
         String init = req.getParameter("init");
 
-        ufoQuestOrigin.scenarioGenerator();
-        ufoQuestOrigin.answersGenerator();
-        ufoQuestOrigin.buildQuest();
+        sessionDataInit(session);
 
+        UFOQuestOrigin ufoQuestOrigin = new UFOQuestOrigin(new AnswerGenerator(), new ScenarioGenerator());
+        ufoQuestOrigin.buildQuest();
         List<Story> scenario = ufoQuestOrigin.getStoryList();
 
+        Story story = null;
+
         if (init.equals("start")) {
-            Story story = scenario.get(0);
+            story = scenario.get(0);
             session.setAttribute("scenario", scenario);
             session.setAttribute("story", story);
 
             for (int i = 0; i < 2; i++) {
-                scenario.remove(i);
-                i--;
+                scenario.remove(0);
             }
 
-            session.getServletContext().getRequestDispatcher("/main.jsp").forward(req, resp);
-
         } else {
-            Story story = scenario.get(1);
+            story = scenario.get(1);
             session.setAttribute("story", story);
-
-            session.getServletContext().getRequestDispatcher("/restart.jsp").forward(req, resp);
         }
 
+        session.setAttribute("data", sessionData);
+
+        session.getServletContext().getRequestDispatcher("/main.jsp").forward(req, resp);
+    }
+
+    private void sessionDataInit(HttpSession session){
+        if (sessionData == null){
+            sessionData = new SessionData(session.getId());
+        }
+        SessionData.round++;
     }
 }
