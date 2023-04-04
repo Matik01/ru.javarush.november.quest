@@ -16,9 +16,10 @@ public class InitServlet extends HttpServlet {
     @Override
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
         HttpSession session = req.getSession();
+        sessionDataInit(session);
         String init = req.getParameter("init");
 
-        sessionDataInit(session);
+
 
         UFOQuestOrigin ufoQuestOrigin = new UFOQuestOrigin(new AnswerGenerator(), new ScenarioGenerator());
         ufoQuestOrigin.buildQuest();
@@ -49,6 +50,6 @@ public class InitServlet extends HttpServlet {
         if (sessionData == null){
             sessionData = new SessionData(session.getId());
         }
-        SessionData.round++;
+        sessionData.increaseRound();
     }
 }

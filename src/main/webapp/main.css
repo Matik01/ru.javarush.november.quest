@@ -1,9 +1,9 @@
 .button{
-    width: 10px;
-    height: 5px;
+    width: 100px;
+    height: 20px;
     background-color: deeppink;
-    color: deeppink;
+    color: black;
 }
 .div{
-    border:3px solid black;
+    border:1px solid black;
 }

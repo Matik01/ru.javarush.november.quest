@@ -1,17 +1,22 @@
 package quest.servlet;
 
 public class SessionData {
-    public static int round = 0;
-    private static String name;
+    private int round = 0;
+    private String name;
 
-    public SessionData(String name){
+    public SessionData(String name) {
         this.name = name;
     }
-    public static String getName() {
+
+    public String getName() {
         return name;
     }
 
-    public static int getRound() {
+    public int getRound() {
         return round;
+    }
+
+    public void increaseRound() {
+        round++;
     }
 }
